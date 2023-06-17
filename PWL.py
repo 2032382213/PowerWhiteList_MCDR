@@ -17,6 +17,7 @@ def on_load(server, old):
     builder = SimpleCommandBuilder()    
     builder.command('!!PWL add <player>', whitelistAdd)
     builder.command('!!PWL remove <player>', whitelistDel)
+    builder.command('!!PWL list', whitelistShow)
     builder.arg("player",GreedyText)
     builder.register(server)
     chdir= os.getcwd()+r"/config/PowerWhiteList/"
@@ -83,3 +84,16 @@ def whitelistDel(player,args):
         p.reply("[PWL] 您没有权限")
         print("[PWL] "+str(player)+"尝试删除白名单但是没有权限")
         print("[PWL] 这是他的权限等级：",get_server.get_permission_level(player))
+def whitelistShow(player):
+    if get_server.get_permission_level(player) == 4:
+        chdir= os.getcwd()+"/config/PowerWhiteList/"
+        ShowMessageN = ""
+        with open(chdir+"BypassPlayer.conf","r") as f:
+            ShowMessage = f.readlines()
+        for i in ShowMessage:
+            ShowMessageN = ShowMessageN+i[:-1]+"\n"
+        player.reply("[PWL] 这是拥有白名单的玩家:\n"+ShowMessageN)
+    else:
+        p.reply("[PWL] 您没有权限")
+        print("[PWL] "+str(player)+"尝试查看白名单但是没有权限")
+        print("[PWL] 这是他的权限等级：",get_server.get_permission_level(player)) 
